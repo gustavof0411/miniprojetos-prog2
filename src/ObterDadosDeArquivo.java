@@ -51,45 +51,11 @@ public class ObterDadosDeArquivo {
                     algumaLinha = scanner.nextLine();
                 }
                 if (algumaLinha.equalsIgnoreCase("CAPÍTULO")) {
-                    Capitulo algumCapitulo = new Capitulo("", "", new Personagem("", 0), 0, "", "");
-                    algumaLinha = scanner.nextLine(); // PULA NOME
                     algumaLinha = scanner.nextLine();
-                    if (!(algumaLinha).equalsIgnoreCase("null")) {
-                        algumCapitulo.setNome(algumaLinha);
-                        algumaLinha = scanner.nextLine(); // PULA TEXTO
-                    } else {
-                        algumCapitulo.setNome(null);
-                        algumaLinha = scanner.nextLine(); // PULA TEXTO
-                    }
                     algumaLinha = scanner.nextLine();
-                    algumCapitulo.setTexto(algumaLinha);
-                    algumaLinha = scanner.nextLine(); // PULA PERSONAGEM
+                    String idCapitulo = algumaLinha;
                     algumaLinha = scanner.nextLine();
-                    algumCapitulo.setPersonagem(personagens.get(algumaLinha));
-                    algumaLinha = scanner.nextLine(); // PULA VIDA
-                    algumaLinha = scanner.nextLine();
-                    algumCapitulo.setVida(personagens.get(algumaLinha).getVida());
-                    algumaLinha = scanner.nextLine(); // PULA CONSEQUÊNCIA
-                    algumaLinha = scanner.nextLine();
-                    if (!algumaLinha.equalsIgnoreCase("null")) {
-                        String vidaConsequencia = algumaLinha;
-                        vidaConsequencia = scanner.nextLine();
-                        algumCapitulo.setConsequencia(personagens.get(algumaLinha)
-                                .getMensagemAtk((personagens.get(algumaLinha)), Integer.parseInt(vidaConsequencia)));
-                        algumaLinha = scanner.nextLine();
-                    } else {
-                        algumCapitulo.setConsequencia(null);
-                        algumaLinha = scanner.nextLine();
-                        algumaLinha = scanner.nextLine();
-                    }
-                    algumaLinha = scanner.nextLine(); // PULA FINAL DO CAPÍTULO
-                    if (!algumaLinha.equalsIgnoreCase("null")) {
-                        algumCapitulo.setFinalCap(algumaLinha);
-                    } else {
-                        algumCapitulo.setFinalCap(null);
-                    }
-                    capitulos.put(algumCapitulo.getNome(), algumCapitulo);
-
+                    capitulos.put(idCapitulo, new Capitulo(personagens, scanner, escaneadorDeEscolhas));
                 } else if (algumaLinha.equalsIgnoreCase("ESCOLHA")) {
                     String capituloDecisivo = "";
                     String opcao1 = "";
@@ -141,7 +107,7 @@ public class ObterDadosDeArquivo {
 
     public void salvarProgresso() {
         try {
-            File arquivoSalvo = new File("rsc/saves/save.txt");
+            File arquivoSalvo = new File("rsc/saves/capituloSave.txt");
             FileOutputStream fos = new FileOutputStream(arquivoSalvo);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(oos);
@@ -189,7 +155,7 @@ public class ObterDadosDeArquivo {
             oos.writeObject(capitulo);
             oos.close();
         } catch (Exception e) {
-            System.out.println("Erro ao salvar o progresso.");
+            System.out.println("Erro ao serializar o capítulo.");
         }
     }
 

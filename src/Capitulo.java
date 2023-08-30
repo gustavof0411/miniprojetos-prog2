@@ -11,6 +11,7 @@ public class Capitulo implements Serializable {
     private String consequencia;
     private ArrayList<Escolha> arrayEscolhas;
     private String finalCap;
+    private transient Scanner scanner;
 
     public Capitulo(String nome, String texto, Personagem personagem, int vida, String consequencia, String finalCap) {
         this.nome = nome;
@@ -20,6 +21,11 @@ public class Capitulo implements Serializable {
         this.vida = vida;
         this.consequencia = consequencia;
         this.finalCap = finalCap;
+    }
+
+    public Capitulo(HashMap<String, Personagem> personagens, Scanner scannerDeArquivo, Scanner scannerDoConsole) {
+        this.lerCapitulo(personagens, scannerDeArquivo);
+        this.scanner = scannerDoConsole;
     }
 
     // Getters
@@ -144,5 +150,45 @@ public class Capitulo implements Serializable {
             }
         }
         return escolhido;
+    }
+
+    public void lerCapitulo(HashMap<String, Personagem> personagens,
+            Scanner escaneadorDoArquivo) {
+        String linhaLida = "";
+        linhaLida = escaneadorDoArquivo.nextLine();
+        if (!(linhaLida).equalsIgnoreCase("null")) {
+            this.nome = linhaLida;
+            linhaLida = escaneadorDoArquivo.nextLine(); // PULA TEXTO
+        } else {
+            this.setNome(null);
+            linhaLida = escaneadorDoArquivo.nextLine(); // PULA TEXTO
+        }
+        linhaLida = escaneadorDoArquivo.nextLine();
+        this.texto = linhaLida;
+        linhaLida = escaneadorDoArquivo.nextLine(); // PULA PERSONAGEM
+        linhaLida = escaneadorDoArquivo.nextLine();
+        this.personagem = personagens.get(linhaLida);
+        linhaLida = escaneadorDoArquivo.nextLine(); // PULA VIDA
+        linhaLida = escaneadorDoArquivo.nextLine();
+        this.vida = personagens.get(linhaLida).getVida();
+        linhaLida = escaneadorDoArquivo.nextLine(); // PULA CONSEQUÊNCIA
+        linhaLida = escaneadorDoArquivo.nextLine();
+        if (!linhaLida.equalsIgnoreCase("null")) {
+            String vidaConsequencia = linhaLida;
+            vidaConsequencia = escaneadorDoArquivo.nextLine();
+            this.consequencia = personagens.get(linhaLida)
+                    .getMensagemAtk((personagens.get(linhaLida)), Integer.parseInt(vidaConsequencia));
+            linhaLida = escaneadorDoArquivo.nextLine();
+        } else {
+            this.consequencia = null;
+            linhaLida = escaneadorDoArquivo.nextLine();
+            linhaLida = escaneadorDoArquivo.nextLine();
+        }
+        linhaLida = escaneadorDoArquivo.nextLine(); // PULA FINAL DO CAPÍTULO
+        if (!linhaLida.equalsIgnoreCase("null")) {
+            this.finalCap = linhaLida;
+        } else {
+            this.setFinalCap(null);
+        }
     }
 }
