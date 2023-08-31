@@ -1,8 +1,18 @@
 import java.util.Scanner;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import java.util.HashMap;
 
-public class Historia {
+public class Historia extends Application {
         public static void main(String[] args) throws Exception {
+                launch(args);
                 Scanner continuar = new Scanner(System.in);
                 HashMap<String, Personagem> personagens = ObterDadosDeArquivo.carregarPersonagem();
                 HashMap<String, Capitulo> capitulos = ObterDadosDeArquivo.carregarCapitulo(personagens, continuar);
@@ -33,5 +43,17 @@ public class Historia {
                         inicial.executar(continuar, capitulos);
 
                 }
+        }
+
+        @Override
+        public void start(Stage primaryStage) throws Exception {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("testeFXML.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene tela = new Scene(root);
+
+                primaryStage.setTitle("Miniprojeto - Programação 2");
+                primaryStage.setScene(tela);
+                primaryStage.show();
+
         }
 }
