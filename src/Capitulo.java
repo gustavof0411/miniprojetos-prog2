@@ -13,7 +13,8 @@ public class Capitulo implements Serializable {
     private String finalCap;
     private transient Scanner scanner;
 
-    public Capitulo(String nome, String texto, Personagem personagem, int vida, String consequencia, String finalCap) {
+    public Capitulo(String nome, String texto, Personagem personagem, int vida, String consequencia, String finalCap,
+            Scanner scanner) {
         this.nome = nome;
         this.texto = texto;
         this.arrayEscolhas = new ArrayList<Escolha>();
@@ -21,6 +22,7 @@ public class Capitulo implements Serializable {
         this.vida = vida;
         this.consequencia = consequencia;
         this.finalCap = finalCap;
+        this.scanner = scanner;
     }
 
     public Capitulo(HashMap<String, Personagem> personagens, Scanner scannerDeArquivo, Scanner scannerDoConsole) {
@@ -57,6 +59,10 @@ public class Capitulo implements Serializable {
         return this.finalCap;
     }
 
+    private Scanner getScanner() {
+        return this.scanner;
+    }
+
     // Setters
     public void setArray(ArrayList<Escolha> escolhas) {
         this.arrayEscolhas = escolhas;
@@ -86,11 +92,19 @@ public class Capitulo implements Serializable {
         this.vida = vida;
     }
 
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void setArrayEscolhas(ArrayList<Escolha> arrayEscolhas) {
+        this.arrayEscolhas = arrayEscolhas;
+    }
+
     // Métodos
 
-    private void mostrar(Scanner continuar) {
+    protected void mostrar() {
         System.out.println(getNome());
-        continuar.nextLine();
+        getScanner().nextLine();
         System.out.println(getTexto());
     }
 
@@ -121,7 +135,7 @@ public class Capitulo implements Serializable {
 
     public int executar(Scanner continuar, HashMap<String, Capitulo> capitulos) {
         ObterDadosDeArquivo.serializadorDeCapitulo(capitulos.get(getNome()));
-        this.mostrar(continuar);
+        this.mostrar();
         if (getConsequencia() != null) {
             System.out.println(getConsequencia());
         }
@@ -138,7 +152,7 @@ public class Capitulo implements Serializable {
                 if (proximoCapitulo.getArray().get(escolhido).getTexto() == null) {
                     Capitulo escolhaAutomatica = proximoCapitulo.getArray().get(0).getProximo();
                     proximoCapitulo.executar(continuar, capitulos);
-                    escolhaAutomatica.mostrar(continuar);
+                    escolhaAutomatica.mostrar();
                     if (escolhaAutomatica.arrayEscolhas.get(0).getProximo() == null) {
                         System.out.println(getPersonagem().getMensagemAtk(getPersonagem(), getVida()));
                         System.out.println(escolhaAutomatica.getFinalCap());

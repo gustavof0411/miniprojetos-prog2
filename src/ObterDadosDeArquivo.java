@@ -47,15 +47,23 @@ public class ObterDadosDeArquivo {
 
             while (scanner.hasNextLine()) {
                 while (!algumaLinha.equalsIgnoreCase("CAPÍTULO") &&
-                        !algumaLinha.equalsIgnoreCase("ESCOLHA")) {
+                        !algumaLinha.equalsIgnoreCase("CAPÍTULO COM IMAGEM") && !algumaLinha.equalsIgnoreCase("ESCOLHA")) {
                     algumaLinha = scanner.nextLine();
                 }
-                if (algumaLinha.equalsIgnoreCase("CAPÍTULO")) {
-                    algumaLinha = scanner.nextLine();
-                    algumaLinha = scanner.nextLine();
-                    String idCapitulo = algumaLinha;
-                    algumaLinha = scanner.nextLine();
-                    capitulos.put(idCapitulo, new Capitulo(personagens, scanner, escaneadorDeEscolhas));
+                if (algumaLinha.equalsIgnoreCase("CAPÍTULO") || algumaLinha.equalsIgnoreCase("CAPÍTULO COM IMAGEM")) {
+                    if (algumaLinha.equalsIgnoreCase("CAPÍTULO")) {
+                        algumaLinha = scanner.nextLine();
+                        algumaLinha = scanner.nextLine();
+                        String idCapitulo = algumaLinha;
+                        algumaLinha = scanner.nextLine();
+                        capitulos.put(idCapitulo, new Capitulo(personagens, scanner, escaneadorDeEscolhas));
+                    } else if (algumaLinha.equalsIgnoreCase("CAPÍTULO COM IMAGEM")) {
+                         algumaLinha = scanner.nextLine();
+                algumaLinha = scanner.nextLine();
+                String idCapitulo = algumaLinha;
+                algumaLinha = scanner.nextLine();
+                        capitulos.put(idCapitulo, new CapituloImagem(personagens, scanner, escaneadorDeEscolhas));
+                    }
                 } else if (algumaLinha.equalsIgnoreCase("ESCOLHA")) {
                     String capituloDecisivo = "";
                     String opcao1 = "";
@@ -160,7 +168,7 @@ public class ObterDadosDeArquivo {
     }
 
     public static Capitulo desserializadorDeCapitulo(String nomeArquivo) {
-        Capitulo capituloSave = new Capitulo(null, null, new Personagem("", 0), 0, null, null);
+        Capitulo capituloSave = new Capitulo(null, null, new Personagem("", 0), 0, null, null, null);
         try {
             File arquivo = new File(nomeArquivo);
             FileInputStream fis = new FileInputStream(arquivo);
